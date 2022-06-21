@@ -1,6 +1,7 @@
 package coverage
 
 import (
+	"errors"
 	"os"
 	"reflect"
 	"strconv"
@@ -69,25 +70,6 @@ func TestSwapOK(t *testing.T) {
 	}
 }
 
-func TestNewMatrixOK(t *testing.T) {
-	_, err := New("a35")
-	if err != nil {
-		t.Errorf("Wrong String Error")
-	}
-
-	_, err = New("1 1 \n 2")
-	if err != nil {
-		t.Errorf("Wrong Matrix Error")
-	}
-
-	matrix, err := New("1 1 \n 2 3")
-	expects := &Matrix{2, 2, []int{1, 1, 2, 3}}
-
-	if err != nil || matrix.cols != expects.cols || matrix.rows != expects.rows {
-		t.Errorf("Wrong Empty Matrix")
-	}
-}
-
 func Equal(a, b []int) bool {
 	if len(a) != len(b) {
 		return false
@@ -98,6 +80,25 @@ func Equal(a, b []int) bool {
 		}
 	}
 	return true
+}
+
+func TestNewMatrixOK(t *testing.T) {
+	matrix, err := New("a35")
+	if matrix != nil || !errors.Is(err, strconv.ErrSyntax) {
+		t.Errorf("Wrong String Error")
+	}
+
+	matrix, err = New("1 1 \n 2")
+	if matrix != nil || err.Error() != "Rows need to be the same length" {
+		t.Errorf("Wrong Matrix Error")
+	}
+
+	matrix, err = New("1 1 \n 2 3")
+	expects := &Matrix{2, 2, []int{1, 1, 2, 3}}
+
+	if err != nil || matrix.cols != expects.cols || matrix.rows != expects.rows {
+		t.Errorf("Wrong Empty Matrix")
+	}
 }
 
 func TestRows(t *testing.T) {
