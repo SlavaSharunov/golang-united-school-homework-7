@@ -55,9 +55,9 @@ func TestLessOK(t *testing.T) {
 
 	people = append(people, Person{"Test", "Surname", now})
 	people = append(people, Person{"Test", "Surname", now.Add(5 * time.Minute)})
-	people = append(people, Person{"Name", "Surname", now})
-	people = append(people, Person{"Name", "Test", now})
-	people = append(people, Person{"Name", "Test", now})
+	people = append(people, Person{"Name", "BTest", now})
+	people = append(people, Person{"Name", "ATest", now})
+	people = append(people, Person{"Name", "ATest", now})
 
 	if people.Less(0, 1) {
 		t.Errorf("Wrong People Less by Birthday")
