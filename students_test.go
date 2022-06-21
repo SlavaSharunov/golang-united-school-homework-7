@@ -50,10 +50,29 @@ func TestLenOK(t *testing.T) {
 }
 
 func TestLessOK(t *testing.T) {
-	createPerson()
-	got := testPersons.Less(4, 6)
-	if got != false {
-		t.Errorf("TestLenOK expected: false, got %t", got)
+	var people People
+	now := time.Time{}
+
+	people = append(people, Person{"Test", "Surname", now})
+	people = append(people, Person{"Test", "Surname", now.Add(5 * time.Minute)})
+	people = append(people, Person{"Name", "Surname", now})
+	people = append(people, Person{"Name", "Test", now})
+	people = append(people, Person{"Name", "Test", now})
+
+	if people.Less(0, 1) {
+		t.Errorf("Wrong People Less by Birthday")
+	}
+
+	if people.Less(0, 2) {
+		t.Errorf("Wrong People Less by FirstName")
+	}
+
+	if people.Less(2, 3) {
+		t.Errorf("Wrong People Less by LastName")
+	}
+
+	if people.Less(3, 4) {
+		t.Errorf("Wrong People Less Eq")
 	}
 }
 
